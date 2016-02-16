@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,8 +17,8 @@ import java.util.List;
 
 public class Processing {
 
-    private MessageWork messageWork;
-    private BufferedReader reader;
+    private final MessageWork messageWork;
+    private final BufferedReader reader;
 
     public Processing(){
         messageWork = new MessageWork();
@@ -118,7 +117,7 @@ public class Processing {
         System.out.println("Enter author: ");
         String author = reader.readLine();
 
-        String timestamp = DateWork.getPresentTime();
+        long timestamp = DateWork.getPresentTime();
 
         Log.in("add message");
 
@@ -136,7 +135,7 @@ public class Processing {
             messageWork.saveFile(url);
         }
         catch (FileNotFoundException e) {
-            Log.in("error not dound file");
+            Log.in("error not found file");
             System.out.println("not found file");
         }
     }
@@ -193,7 +192,7 @@ public class Processing {
                 System.out.println("id - " + item.getId());
                 System.out.println("message - " + item.getMessage());
                 System.out.println("author - " + item.getAuthor());
-                System.out.println("timestamp - " + DateWork.dateToString(item.getTimestamp()));
+                System.out.println("timestamp - " + DateWork.stringDate(item.getTimestamp()));
                 System.out.println("------------------------------");
             }
 
@@ -259,13 +258,11 @@ public class Processing {
 
         try {
 
-            DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd MM yyyy");
-
             System.out.println("Enter min date(for example - 01 01 1970): ");
-            LocalDate minDate = LocalDate.parse(reader.readLine(), formatDate);
+            LocalDate minDate = LocalDate.parse(reader.readLine(), DateWork.getFormat());
 
             System.out.println("Enter max date(format - 01 01 1970): ");
-            LocalDate maxDate = LocalDate.parse(reader.readLine(), formatDate);
+            LocalDate maxDate = LocalDate.parse(reader.readLine(), DateWork.getFormat());
 
             Log.in("period: " + minDate + " and " + maxDate);
 

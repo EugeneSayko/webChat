@@ -3,21 +3,19 @@ package by.lab.message;
 import by.lab.date.DateWork;
 import by.lab.file.Log;
 import by.lab.file.FileWork;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MessageWork {
-    private List<Message> historyMessage;
-    private FileWork fileWork;
+    private final List<Message> historyMessage;
+    private final FileWork fileWork;
 
     public MessageWork(){
         historyMessage = new ArrayList<>();
@@ -76,23 +74,12 @@ public class MessageWork {
     }
 
     public List<Message> searchAuthor(String author) {
-        List<Message> list = new ArrayList<>();
-        for (Message item : historyMessage) {
-            if (item.getAuthor().equalsIgnoreCase(author)){
-                list.add(item);
-            }
-        }
+        List<Message> list = historyMessage.stream().filter(item -> item.getAuthor().equalsIgnoreCase(author)).collect(Collectors.toList());
         return list;
     }
 
     public List<Message> searchKeyword(String keyword) {
-        List<Message> list = new ArrayList<>();
-        for (Message item : historyMessage) {
-            if (item.getMessage().toLowerCase().contains(keyword.toLowerCase())){
-                list.add(item);
-            }
-
-        }
+        List<Message> list = historyMessage.stream().filter(item -> item.getMessage().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
         return list;
     }
 
@@ -115,13 +102,11 @@ public class MessageWork {
 
         List<Message> list = new ArrayList<>();
 
-        DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd MM yyyy");
-
         for (Message item : historyMessage) {
 
-            long time = Long.parseLong(item.getTimestamp());
+            long time = item.getTimestamp();
 
-            LocalDate date = LocalDate.parse(DateWork.stringDate(time), formatDate);
+            LocalDate date = LocalDate.parse(DateWork.stringDate(time), DateWork.getFormat());
 
             if (date.isAfter(minDate) && date.isBefore(maxDate)){
                 list.add(item);

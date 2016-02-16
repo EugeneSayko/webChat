@@ -6,13 +6,13 @@ public class Message implements Serializable {
     private String id;
     private String message;
     private String author;
-    private String timestamp;
+    private long timestamp;
 
-    public Message(String id, String message, String author, String timestamp) {
+    public Message(String id, String message, String author, long timestamp) {
         this.id = id;
-        this.message = new String(message);
-        this.author = new String(author);
-        this.timestamp = new String(timestamp);
+        this.message = message;
+        this.author = author;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -27,7 +27,7 @@ public class Message implements Serializable {
         return this.author;
     }
 
-    public String getTimestamp() {
+    public long getTimestamp() {
         return this.timestamp;
     }
 

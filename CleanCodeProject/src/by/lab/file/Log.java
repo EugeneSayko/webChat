@@ -12,7 +12,7 @@ public class Log {
 
         try(
                 FileOutputStream fileOutputStream = new FileOutputStream(LOG_FILE_NAME, true);
-                PrintStream printStream = new PrintStream(fileOutputStream);
+                PrintStream printStream = new PrintStream(fileOutputStream)
                 ) {
 
             printStream.println(text);

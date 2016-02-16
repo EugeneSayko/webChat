@@ -6,11 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DateWork {
-    public static String dateToString(String when) {
-        Date date = new Date();
-        date.setTime(Long.parseLong(when));
-        return date.toString();
-    }
 
     public static String stringDate(long time){
 
@@ -21,8 +16,12 @@ public class DateWork {
 
     }
 
-    public static String getPresentTime() {
+    public static long getPresentTime() {
         Date date = new Date();
-        return String.valueOf(date.getTime());
+        return date.getTime();
+    }
+
+    public static DateTimeFormatter getFormat(){
+        return DateTimeFormatter.ofPattern("dd MM yyyy");
     }
 }
