@@ -21,8 +21,10 @@ public class Processing {
     private final BufferedReader reader;
 
     public Processing(){
+
         messageWork = new MessageWork();
         reader = new BufferedReader(new InputStreamReader(System.in));
+
     }
 
     public void start() throws IOException {
@@ -30,6 +32,7 @@ public class Processing {
         Log.in("program launch");
 
         int number = 1;
+
         while (number != 0) {
             menu();
             try {
@@ -149,8 +152,10 @@ public class Processing {
             messageWork.addFile(url);
         }
         catch (FileNotFoundException e) {
+
             Log.in("error not found file");
             System.out.println("not found file");
+
         }
     }
 
@@ -189,11 +194,13 @@ public class Processing {
         if (list != null && list.size() != 0) {
 
             for (Message item : list) {
+
                 System.out.println("id - " + item.getId());
                 System.out.println("message - " + item.getMessage());
                 System.out.println("author - " + item.getAuthor());
                 System.out.println("timestamp - " + DateWork.stringDate(item.getTimestamp()));
                 System.out.println("------------------------------");
+
             }
 
         } else {

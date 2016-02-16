@@ -74,13 +74,11 @@ public class MessageWork {
     }
 
     public List<Message> searchAuthor(String author) {
-        List<Message> list = historyMessage.stream().filter(item -> item.getAuthor().equalsIgnoreCase(author)).collect(Collectors.toList());
-        return list;
+        return historyMessage.stream().filter(item -> item.getAuthor().equalsIgnoreCase(author)).collect(Collectors.toList());
     }
 
     public List<Message> searchKeyword(String keyword) {
-        List<Message> list = historyMessage.stream().filter(item -> item.getMessage().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
-        return list;
+        return historyMessage.stream().filter(item -> item.getMessage().toLowerCase().contains(keyword.toLowerCase())).collect(Collectors.toList());
     }
 
     public List<Message> searchRegularExpression(String regular) {

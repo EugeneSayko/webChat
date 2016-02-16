@@ -12,16 +12,21 @@ public class DateWork {
         Date date = new Date();
         date.setTime(time);
         DateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
+
         return dateFormat.format(date);
 
     }
 
     public static long getPresentTime() {
+
         Date date = new Date();
         return date.getTime();
+
     }
 
     public static DateTimeFormatter getFormat(){
+
         return DateTimeFormatter.ofPattern("dd MM yyyy");
+
     }
 }

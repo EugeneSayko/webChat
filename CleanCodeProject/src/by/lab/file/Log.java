@@ -10,22 +10,25 @@ public class Log {
 
     public static void in(String text) {
 
-        try(
-                FileOutputStream fileOutputStream = new FileOutputStream(LOG_FILE_NAME, true);
-                PrintStream printStream = new PrintStream(fileOutputStream)
+        try(FileOutputStream fileOutputStream = new FileOutputStream(LOG_FILE_NAME, true);
+            PrintStream printStream = new PrintStream(fileOutputStream)
                 ) {
 
             printStream.println(text);
 
         }catch (IOException e) {
-            System.err.println("error in text to log!" + e.toString());
+            Log.in("error in text to log!" + e.toString());
         }
     }
 
     public static void updateFile() {
+
         File file = new File(LOG_FILE_NAME);
+
         if(!file.delete()){
             System.out.println("error delete file");
+            Log.in("error delete log file");
         }
+
     }
 }

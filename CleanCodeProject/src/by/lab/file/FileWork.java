@@ -15,8 +15,7 @@ public class FileWork {
 
         BufferedReader reader = new BufferedReader(new FileReader(filename));
 
-        Type collectionType = new TypeToken<List<Message>>() {
-        }.getType();
+        Type collectionType = new TypeToken<List<Message>>() {}.getType();
 
         Gson gson = new Gson();
         list = gson.fromJson(reader, collectionType);
@@ -32,8 +31,10 @@ public class FileWork {
 
 
             if (listMessage.size() != 0) {
+
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 ps.println(gson.toJson(listMessage));
+
             } else {
                 ps.println("not found messages");
             }
