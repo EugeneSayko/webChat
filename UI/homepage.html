@@ -7,140 +7,172 @@
 
     <title>Home</title>
 
-    <link rel='stylesheet prefetch' href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'>
+
     <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Open+Sans'>
     <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/jScrollPane/2.0.14/jquery.jscrollpane.min.css'>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
     <link media="screen" href="styles.css" type="text/css" rel="stylesheet" />
 
 </head>
 
 <body>
+<div class="header"></div>
 
-<div class="window-wrapper">
+<div class="container">
+    <div class="window-wrapper">
 
-    <div class="window-area">
+        <div class="window-area">
 
-        <div class="chat-area">
-            <div class="title"><b>Messages</b><i class="fa fa-search"></i></div>
-            <div class="chat-list">
-                <ul>
-                    <li class="me">
-                        <div class="name">
-                            <span class="">Sayko Eugene</span>
-                        </div>
-                        <div class="message">
-                            <p>Hey, do you like the new interface?</p>
-                            <span class="delete-button"><img src="images/trash.png"/></span>
-                            <span class="edit-button"><img src="images/pen.png"/></span>
-                            <span class="msg-time">5:00 pm</span>
-                        </div>
-                    </li>
-                    <li class="">
-                        <div class="name">
-                            <span class="">User1</span>
-                        </div>
-                        <div class="message">
-                            <p>Hello world</p>
-                            <span class="msg-time">5:01 pm</span>
-                        </div>
-                    </li>
-                    <li class="">
-                        <div class="name">
-                            <span class="">User2</span>
-                        </div>
-                        <div class="message">
-                            <p>Feel free to look at the code if you want.</p>
-                            <span class="msg-time">5:02 pm</span>
-                        </div>
-                    </li>
-                    <li class="me">
-                        <div class="name">
-                            <span class="">Sayko Eugene</span>
-                        </div>
-                        <div class="message">
-                            <p>Yeah, will do.</p>
-                            <span class="delete-button"><img src="images/trash.png"/></span>
-                            <span class="edit-button"><img src="images/pen.png"/></span>
-                            <span class="msg-time">5:04 pm</span>
-                        </div>
-                    </li>
-                    <li class="">
-                        <div class="name">
-                            <span class="">User2</span>
-                        </div>
-                        <div class="message">
-                            <p>This is an example text reply.</p>
-                            <span class="msg-time">5:04 pm</span>
-                        </div>
-                    </li>
-                    <li class="">
-                        <div class="name">
-                            <span class="">User1</span>
-                        </div>
-                        <div class="message">
-                            <p>I know, put some more.</p>
-                            <span class="msg-time">5:06 pm</span>
-                        </div>
-                    </li>
-                    <li class="">
-                        <div class="name">
-                            <span class="">User3</span>
-                        </div>
-                        <div class="message">
-                            <p>Here is another line.</p>
-                            <span class="msg-time">5:06 pm</span>
-                        </div>
-                    </li>
-                    <li class="">
-                        <div class="name">
-                            <span class="">User1</span>
-                        </div>
-                        <div class="message">
-                            <p>Yeah, will do.</p>
-                            <span class="msg-time">5:07 pm</span>
-                        </div>
-                    </li>
-
-                    <li class="me">
-                        <div class="name">
-                            <span class="">Sayko Eugene</span>
-                        </div>
-                        <div class="message">
-                            <p>Good bay.</p>
-                            <span class="delete-button"><img src="images/trash.png"/></span>
-                            <span class="edit-button"><img src="images/pen.png"/></span>
-                            <span class="msg-time">5:08 pm</span>
-                        </div>
-                    </li>
-
-                </ul>
-            </div>
-            <div class="input-area">
-                <div class="input-wrapper">
-                    <input type="text" value="">
+            <div class="chat-area">
+                <div class="title">
+                    <b>Messages</b>
+                    <span class="glyphicon glyphicon-search"></span>
                 </div>
-                <input type="button" value="Send" >
+                <div class="chat-list">
+                    <ul>
+                        <li class="me">
+                            <div class="name">
+                                <span class="">Sayko Eugene</span>
+                            </div>
+                            <div class="message">
+                                <p>Hey, do you like the new interface?</p>
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="glyphicon glyphicon-trash"></span>
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+
+                        <li class="">
+                            <div class="name">
+                                <span class="">User1</span>
+                            </div>
+                            <div class="message">
+                                <p>Hello world</p>
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+                        <li class="">
+                            <div class="name">
+                                <span class="">User2</span>
+                            </div>
+                            <div class="message">
+                                <p>Feel free to look at the code if you want.</p>
+
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+                        <li class="me">
+                            <div class="name">
+                                <span class="">Sayko Eugene</span>
+                            </div>
+                            <div class="message">
+                                <p>Yeah, will do.</p>
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="glyphicon glyphicon-trash"></span>
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+                        <li class="">
+                            <div class="name">
+                                <span class="">User2</span>
+                            </div>
+                            <div class="message">
+                                <p>This is an example text reply.</p>
+
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+                        <li class="">
+                            <div class="name">
+                                <span class="">User1</span>
+                            </div>
+                            <div class="message">
+                                <p>I know, put some more.</p>
+
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+                        <li class="">
+                            <div class="name">
+                                <span class="">User3</span>
+                            </div>
+                            <div class="message">
+                                <p>Here is another line.</p>
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+                        <li class="">
+                            <div class="name">
+                                <span class="">User1</span>
+                            </div>
+                            <div class="message">
+                                <p>Yeah, will do.</p>
+
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+
+                        <li class="me">
+                            <div class="name">
+                                <span class="">Sayko Eugene</span>
+                            </div>
+                            <div class="message">
+                                <p>Good bay.</p>
+                            </div>
+                            <div class="delete-and-edit">
+                                <span class="glyphicon glyphicon-trash"></span>
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="msg-time">5:00 pm</span>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="input-area">
+                    <div class="input-wrapper">
+                        <input type="text" value="">
+                    </div>
+                    <input type="button" value="Send" >
+                </div>
+            </div>
+            <div class="right-tabs">
+                <h2>Список участников</h2>
+                <ul class="tabs-container">
+                    <li class="active">
+                        <ul class="member-list">
+                            <li class="me-list"></span><span>Sayko Eugene</span><span class="glyphicon glyphicon-pencil"></span></li>
+                            <li></span><span>User1</span></li>
+                            <li></span><span>User2</span></li>
+                            <li></span><span>User3</span></li>
+                        </ul>
+                    </li>
+                </ul>
+
             </div>
         </div>
-        <div class="right-tabs">
-            <h2>Список участников</h2>
-            <ul class="tabs-container">
-                <li class="active">
-                    <ul class="member-list">
-                        <li class="me-list"></span><span>Sayko Eugene</span><span class="edit-button-user"><img src="images/pen.png"/></span></li>
-                        <li></span><span>User1</span></li>
-                        <li></span><span>User2</span></li>
-                        <li></span><span>User3</span></li>
-                    </ul>
-                </li>
-                <li></li>
-                <li></li>
-            </ul>
 
-        </div>
     </div>
 </div>
 
+
+<div class="footer"></div>
 </body>
 
 </html>
