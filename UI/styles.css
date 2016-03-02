@@ -290,4 +290,14 @@ ul.tabs-container{
     padding-right: 5px;
 }
 
+.footer{
+    display: flex;
+    color: #cfdae1;
+    font-size: 15px;
+    
+    font-family: 'MV Boli', Arial, sans-serif;
+    justify-content: center;
+    padding: 10px;
+}
+
 
