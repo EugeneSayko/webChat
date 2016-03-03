@@ -15,7 +15,7 @@ html{
 }
 
 .header{
-    height: 50px;
+    height: 60px;
     width: 100%;
 }
 
@@ -48,18 +48,6 @@ body{
     width: 100%;
 }
 
-.window-wrapper{
-    display: flex;
-    justify-content: center;
-    flex-basis: 60%;
-
-    background: #fff;
-
-    border-radius: 6px;
-
-
-    margin: 0;
-}
 
 .window-area{
     display: flex;
@@ -87,6 +75,15 @@ body{
     flex-basis: 10%;
     height: 10%;
     min-height: 25px;
+}
+
+.title b{
+
+    color: #5D7185;
+
+
+
+
 }
 
 .error{
@@ -303,3 +300,34 @@ ul.tabs-container{
 }
 
 
+
+@media only screen  {
+    .window-wrapper{
+        display: flex;
+        justify-content: center;
+        flex-basis: 100%;
+        background: #fff;
+        border-radius: 6px;
+        margin: 0;
+    }
+
+    .container{
+        padding: 0;
+    }
+}
+@media only screen and (min-width: 768px) and (min-device-width: 768px) {
+
+    .window-wrapper{
+        display: flex;
+        justify-content: center;
+        flex-basis: 60%;
+
+        background: #fff;
+
+        border-radius: 6px;
+
+        margin: 0;
+    }
+
+
+}
