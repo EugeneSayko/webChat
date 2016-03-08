@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileWork {
+public class FileUtil {
     public List<Message> read(String filename) throws FileNotFoundException {
         ArrayList<Message> list;
 

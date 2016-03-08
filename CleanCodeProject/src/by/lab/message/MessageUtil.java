@@ -1,8 +1,8 @@
 package by.lab.message;
 
-import by.lab.date.DateWork;
+import by.lab.date.DateUtil;
 import by.lab.file.Log;
-import by.lab.file.FileWork;
+import by.lab.file.FileUtil;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -11,13 +11,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class MessageWork {
+public class MessageUtil {
     private final List<Message> historyMessage;
-    private final FileWork fileWork;
+    private final FileUtil fileUtil;
 
-    public MessageWork(){
+    public MessageUtil(){
         historyMessage = new ArrayList<>();
-        fileWork = new FileWork();
+        fileUtil = new FileUtil();
     }
 
     public void add(Message message) {
@@ -53,7 +53,7 @@ public class MessageWork {
 
     public void addFile(String filename) throws FileNotFoundException {
 
-        List<Message> list = fileWork.read(filename);
+        List<Message> list = fileUtil.read(filename);
         historyMessage.addAll(list);
 
         StringBuilder sb = new StringBuilder();
@@ -67,7 +67,7 @@ public class MessageWork {
     }
 
     public void saveFile(String filename) throws IOException {
-        fileWork.write(filename, historyMessage);
+        fileUtil.write(filename, historyMessage);
         Log.in("History of messages downloaded to " + filename);
     }
 
@@ -102,7 +102,7 @@ public class MessageWork {
 
             long time = item.getTimestamp();
 
-            LocalDate date = LocalDate.parse(DateWork.stringDate(time), DateWork.getFormat());
+            LocalDate date = LocalDate.parse(DateUtil.stringDate(time), DateUtil.getFormat());
 
             if (date.isAfter(minDate) && date.isBefore(maxDate)){
                 list.add(item);

@@ -13,9 +13,11 @@
 
     <link media="screen" href="styles.css" type="text/css" rel="stylesheet" />
 
+    <script src="js/todo.js" ></script>
+
 </head>
 
-<body>
+<body onload="run();">
 <div class="header">
 
 </div>
@@ -35,7 +37,7 @@
                     <span class="glyphicon glyphicon-search"></span>
                 </div>
                 <div class="chat-list">
-                    <ul>
+                    <ul class="messages">
                         <li class="me">
                             <div class="name">
                                 <span class="">Sayko Eugene</span>
@@ -61,6 +63,7 @@
                                 <span class="msg-time">5:00 pm</span>
                             </div>
                         </li>
+
                         <li class="">
                             <div class="name">
                                 <span class="">User2</span>
@@ -165,9 +168,9 @@
                 </div>
                 <div class="input-area">
                     <div class="input-wrapper">
-                        <input type="text" value="">
+                        <input type="text" value="" id="textMessage">
                     </div>
-                    <input type="button" value="Send" >
+                    <input type="button" value="Send" class="add-button">
                 </div>
             </div>
             <div class="right-tabs">
@@ -175,7 +178,11 @@
                 <ul class="tabs-container">
                     <li class="active">
                         <ul class="member-list">
-                            <li class="me-list"></span><span>Sayko Eugene</span><span class="glyphicon glyphicon-pencil"></span></li>
+                            <li class="me-list"></span><span>Eugene Sayko</span>
+                                <a  class="editUserName" id="editUserName" onclick="editUserNameInput(this)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            </li>
                             <li></span><span>User1</span></li>
                             <li></span><span>User2</span></li>
                             <li></span><span>User3</span></li>

@@ -1,9 +1,9 @@
 package by.lab;
 
-import by.lab.date.DateWork;
+import by.lab.date.DateUtil;
 import by.lab.file.Log;
 import by.lab.message.Message;
-import by.lab.message.MessageWork;
+import by.lab.message.MessageUtil;
 import by.lab.message.SortComparator;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -17,12 +17,12 @@ import java.util.List;
 
 public class Processing {
 
-    private final MessageWork messageWork;
+    private final MessageUtil messageUtil;
     private final BufferedReader reader;
 
     public Processing(){
 
-        messageWork = new MessageWork();
+        messageUtil = new MessageUtil();
         reader = new BufferedReader(new InputStreamReader(System.in));
 
     }
@@ -120,11 +120,11 @@ public class Processing {
         System.out.println("Enter author: ");
         String author = reader.readLine();
 
-        long timestamp = DateWork.getPresentTime();
+        long timestamp = DateUtil.getPresentTime();
 
         Log.in("add message");
 
-        this.messageWork.add(new Message(id, message, author, timestamp));
+        this.messageUtil.add(new Message(id, message, author, timestamp));
 
         Log.in(author + ": " + message);
     }
@@ -135,7 +135,7 @@ public class Processing {
         String url = reader.readLine();
 
         try {
-            messageWork.saveFile(url);
+            messageUtil.saveFile(url);
         }
         catch (FileNotFoundException e) {
             Log.in("error not found file");
@@ -149,7 +149,7 @@ public class Processing {
         String url = reader.readLine();
 
         try {
-            messageWork.addFile(url);
+            messageUtil.addFile(url);
         }
         catch (FileNotFoundException e) {
 
@@ -163,9 +163,9 @@ public class Processing {
 
         Log.in("request: view all messages");
 
-        Log.in("total number of messages - " + messageWork.getAll().size());
+        Log.in("total number of messages - " + messageUtil.getAll().size());
 
-        print(messageWork.getAll());
+        print(messageUtil.getAll());
     }
 
     private void deleteMessage() throws IOException {
@@ -175,14 +175,14 @@ public class Processing {
         System.out.println("enter id: ");
         String id = reader.readLine();
 
-        messageWork.delete(id);
+        messageUtil.delete(id);
     }
 
     private void chronologicalOrder() {
 
         Log.in("request: view messages in chronological order");
 
-        List<Message> list = new ArrayList<>(messageWork.getAll());
+        List<Message> list = new ArrayList<>(messageUtil.getAll());
 
         Collections.sort(list, new SortComparator());
 
@@ -198,7 +198,7 @@ public class Processing {
                 System.out.println("id - " + item.getId());
                 System.out.println("message - " + item.getMessage());
                 System.out.println("author - " + item.getAuthor());
-                System.out.println("timestamp - " + DateWork.stringDate(item.getTimestamp()));
+                System.out.println("timestamp - " + DateUtil.stringDate(item.getTimestamp()));
                 System.out.println("------------------------------");
 
             }
@@ -218,7 +218,7 @@ public class Processing {
         Log.in("author: " + author);
 
         List<Message> list = new ArrayList<>();
-        list.addAll(messageWork.searchAuthor(author));
+        list.addAll(messageUtil.searchAuthor(author));
 
         Log.in("messages found - " + list.size());
 
@@ -235,7 +235,7 @@ public class Processing {
         Log.in("key word: " + keyword);
 
         List<Message> list = new ArrayList<>();
-        list.addAll(messageWork.searchKeyword(keyword));
+        list.addAll(messageUtil.searchKeyword(keyword));
 
         Log.in("messages found - " + list.size());
 
@@ -252,7 +252,7 @@ public class Processing {
         Log.in("regular expression: " + regular);
 
         List<Message> list = new ArrayList<>();
-        list.addAll(messageWork.searchRegularExpression(regular));
+        list.addAll(messageUtil.searchRegularExpression(regular));
 
         Log.in("messages found - " + list.size());
 
@@ -266,15 +266,15 @@ public class Processing {
         try {
 
             System.out.println("Enter min date(for example - 01 01 1970): ");
-            LocalDate minDate = LocalDate.parse(reader.readLine(), DateWork.getFormat());
+            LocalDate minDate = LocalDate.parse(reader.readLine(), DateUtil.getFormat());
 
             System.out.println("Enter max date(format - 01 01 1970): ");
-            LocalDate maxDate = LocalDate.parse(reader.readLine(), DateWork.getFormat());
+            LocalDate maxDate = LocalDate.parse(reader.readLine(), DateUtil.getFormat());
 
             Log.in("period: " + minDate + " and " + maxDate);
 
             List<Message> list = new ArrayList<>();
-            list.addAll(messageWork.historyPeriod(minDate, maxDate));
+            list.addAll(messageUtil.historyPeriod(minDate, maxDate));
 
             print(list);
 

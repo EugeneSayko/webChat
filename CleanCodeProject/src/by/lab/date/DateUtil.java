@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class DateWork {
+public class DateUtil {
 
     public static String stringDate(long time){
 
