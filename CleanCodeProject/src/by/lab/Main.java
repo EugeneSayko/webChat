@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Log.updateFile();
+        Log.deleteLogFile();
         Processing processing = new Processing();
         try {
             processing.start();

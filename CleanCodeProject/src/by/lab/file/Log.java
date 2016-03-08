@@ -21,13 +21,12 @@ public class Log {
         }
     }
 
-    public static void updateFile() {
+    public static void deleteLogFile() {
 
         File file = new File(LOG_FILE_NAME);
 
         if(!file.delete()){
             System.out.println("error delete file");
-            Log.in("error delete log file");
         }
 
     }
