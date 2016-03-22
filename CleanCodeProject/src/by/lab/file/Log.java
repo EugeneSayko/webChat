@@ -17,7 +17,7 @@ public class Log {
             printStream.println(text);
 
         }catch (IOException e) {
-            Log.in("error in text to log!" + e.toString());
+
         }
     }
 
