@@ -7,7 +7,6 @@ function run(){
 
     appContainer.addEventListener('click', delegateEvent);
     appContainer.addEventListener('change', delegateEvent);
-    appContainer.addEventListener('dblclick', delegateEvent);
 
     messagesList = [
         newMessage("Eugene Sayko", "hello world", true),
@@ -24,14 +23,14 @@ function delegateEvent(evtObj){
     if(evtObj.type == 'click' && evtObj.target.classList.contains('edit-name-button')){
         editUserName();
     }
-    if(evtObj.type === 'onclick' && evtObj.target.classList.contains('me')){
-        checkTypeClick(evtObj.target.parentElement);
-    }
+    
 }
 
 function addMessage(){
     var textMessage = document.getElementById("textMessage");
-    renderMessage(newMessage(username, textMessage.value, true));
+    var newmessage = newMessage(username, textMessage.value, true);
+    messagesList.push(newmessage);
+    renderMessage(newmessage);
     textMessage.value = "";
 }
 
@@ -103,6 +102,11 @@ function newMessage(name, text, me){
 
 function deleteMessage(element){
     var message = element.parentNode.parentNode;
-    console.log(message.getAttribute("data-task-id"));
+    var index = message.getAttribute("data-task-id");
+    messagesList.splice(index, 1);
+    console.log(messagesList);
     message.parentElement.removeChild(message);
+
+
+
 }
