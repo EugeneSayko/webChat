@@ -1,12 +1,17 @@
 var messagesList = [];
-var username = "Eugene Sayko";
+var username;
 var counter = 0;
+
+var LOCAL_STORAGE_USERNAME = "chat username";
 
 function run(){
     var appContainer = document.getElementsByClassName('container')[0];
 
     appContainer.addEventListener('click', delegateEvent);
     appContainer.addEventListener('change', delegateEvent);
+
+    username = localStorage.getItem(LOCAL_STORAGE_USERNAME);
+    editLogin(username);
 
     messagesList = [
         newMessage("Eugene Sayko", "hello world", true),
@@ -52,6 +57,7 @@ function renderMessageState(template, message){
     template.setAttribute("data-task-id", counter.toString());
 
     var name = template.getElementsByClassName("name")[0];
+    console.log(message.name);
     name.textContent = message.name;
 
     var text = template.getElementsByClassName("text")[0];
@@ -87,8 +93,12 @@ function editUserName(){
 
     var newname = document.getElementById('editUserNameText');
     username = newname.value;
+    editLogin(username);
+}
+
+function editLogin(login){
     var a = document.getElementsByClassName("me-list")[0];
-    a.innerHTML = '</span><span>'+username+'</span><a  class="editUserName" id="editUserName" onclick="editUserNameInput(this)"><span class="glyphicon glyphicon-pencil"></span></a>';
+    a.innerHTML = '</span><span>'+login+'</span><a  class="editUserName" id="editUserName" onclick="editUserNameInput(this)"><span class="glyphicon glyphicon-pencil"></span></a>';
 }
 
 function newMessage(name, text, me){
@@ -104,9 +114,23 @@ function deleteMessage(element){
     var message = element.parentNode.parentNode;
     var index = message.getAttribute("data-task-id");
     messagesList.splice(index, 1);
-    console.log(messagesList);
     message.parentElement.removeChild(message);
 
-
-
 }
+
+function loginInput(){
+    username = document.getElementById("input_name").value;
+    if((username != '') && (username != null)){
+        saveName(username);
+    }else{
+        saveName("default");
+    }
+
+    location.href = 'homepage.html';
+}
+
+function saveName(login){
+    localStorage.setItem(LOCAL_STORAGE_USERNAME, login);
+}
+
+

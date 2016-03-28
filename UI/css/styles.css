@@ -34,7 +34,7 @@ body{
     justify-content: center;
     width: 100%;
     height: 100%;
-    background-image: url("images/gory-tuman-les.jpg");
+    background-image: url("../images/gory-tuman-les.jpg");
     background-size: cover;
     font-family: 'Open Sans', Arial, sans-serif;
     font-size: 12px;
