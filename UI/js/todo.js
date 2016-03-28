@@ -117,7 +117,7 @@ function deleteMessage(element){
     var index = message.getAttribute("data-task-id");
     messagesList.splice(index, 1);
     message.parentElement.removeChild(message);
-
+    saveMessages();
 }
 
 function loginInput(){
