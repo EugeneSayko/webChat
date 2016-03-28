@@ -3,6 +3,7 @@ var username;
 var counter = 0;
 
 var LOCAL_STORAGE_USERNAME = "chat username";
+var LOCAL_STORAGE_MESSAGE_LIST = "message list";
 
 function run(){
     var appContainer = document.getElementsByClassName('container')[0];
@@ -13,10 +14,7 @@ function run(){
     username = localStorage.getItem(LOCAL_STORAGE_USERNAME);
     editLogin(username);
 
-    messagesList = [
-        newMessage("Eugene Sayko", "hello world", true),
-        newMessage("user1", "hello!", false)
-    ];
+    messagesList = restoreMessages() || [];
     render(messagesList);
 
 }
@@ -35,8 +33,10 @@ function addMessage(){
     var textMessage = document.getElementById("textMessage");
     var newmessage = newMessage(username, textMessage.value, true);
     messagesList.push(newmessage);
+    saveMessages();
     renderMessage(newmessage);
     textMessage.value = "";
+
 }
 
 function render(messages){
@@ -71,7 +71,7 @@ function renderMessageState(template, message){
         template.className = "me";
         var deleteAndEdit = template.getElementsByClassName("delete-and-edit")[0];
         deleteAndEdit.innerHTML = "<span onclick='deleteMessage(this)' class='glyphicon glyphicon-trash'></span>" +
-            "<span class='glyphicon glyphicon-pencil'></span>" +
+            "<span onclick='editMessageInput(this)' class='glyphicon glyphicon-pencil'></span>" +
             "<span class='msg-time'>5:00 pm</span>";
     }
 
@@ -98,7 +98,9 @@ function editUserName(){
 
 function editLogin(login){
     var a = document.getElementsByClassName("me-list")[0];
-    a.innerHTML = '</span><span>'+login+'</span><a  class="editUserName" id="editUserName" onclick="editUserNameInput(this)"><span class="glyphicon glyphicon-pencil"></span></a>';
+    a.innerHTML = '</span><span>'+login+'</span><a  class="editUserName" id="editUserName" onclick="editUserNameInput(this)">' +
+        '<span class="glyphicon glyphicon-pencil"></span></a>';
+    saveName(login);
 }
 
 function newMessage(name, text, me){
@@ -133,4 +135,37 @@ function saveName(login){
     localStorage.setItem(LOCAL_STORAGE_USERNAME, login);
 }
 
+function saveMessages(){
+    localStorage.setItem(LOCAL_STORAGE_MESSAGE_LIST, JSON.stringify(messagesList));
+}
 
+function restoreMessages(){
+    var item = localStorage.getItem(LOCAL_STORAGE_MESSAGE_LIST);
+    return item && JSON.parse(item);
+}
+
+function editMessageInput(element){
+    var message = element.parentNode.parentNode;
+
+    var input = message.getElementsByClassName("message")[0];
+    input.innerHTML = '<input type="text" class = "input_new_message" id="editMessageText">' +
+        '<input type="button" class="edit-message-button" onclick="editMessage(this)" value="edit">';
+
+}
+
+function editMessage(element){
+    var newTextMessage = document.getElementById('editMessageText');
+    var text = element.parentNode;
+    text.innerHTML = '<p class="text">'+newTextMessage.value+'</p>';
+
+    var message = text.parentNode;
+    console.log(message);
+
+    var index = message.getAttribute("data-task-id");
+
+    for(var i = 0; i < messagesList.length; i++){
+        if(messagesList[i].id == index){
+            messagesList[i].text = newTextMessage.value;
+        }
+    }
+}
