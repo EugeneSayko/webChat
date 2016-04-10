@@ -99,8 +99,10 @@ public class ServerHandler implements HttpHandler {
         try {
             Message message = MessageHelper.getClientMessage(httpExchange.getRequestBody());
             logger.info(String.format("Received new message from user: %s", message));
-            messageStorage.addMessage(message);
-            return Response.ok();
+            if(messageStorage.addMessage(message)){
+                return Response.ok();
+            }
+            return new Response(Constants.RESPONSE_CODE_BAD_REQUEST, "error add message");
         } catch (ParseException e) {
             logger.error("Could not parse message.", e);
             return new Response(Constants.RESPONSE_CODE_BAD_REQUEST, "Incorrect request body");
@@ -122,7 +124,11 @@ public class ServerHandler implements HttpHandler {
             messageObj.setAuthor("");
             messageObj.setTimestamp(0);
 
-            messageStorage.updateMessage(messageObj);
+            if(messageStorage.updateMessage(messageObj)){
+                return Response.ok();
+            }else{
+                return Response.withCode(Constants.RESPONSE_CODE_NOT_IMPLEMENTED);
+            }
 
         } catch (ParseException e) {
             logger.error("Could not parse message.", e);

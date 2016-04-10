@@ -17,7 +17,7 @@ public interface MessageStorage {
      * Adds message to the storage
      * @param message the message to be added
      */
-    void addMessage(Message message);
+    boolean addMessage(Message message);
 
     /**
      * Updates the message, which's id is equal to the id of provided message

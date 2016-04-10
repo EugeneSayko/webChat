@@ -30,15 +30,17 @@ public class InFileMessageStorage implements MessageStorage {
     }
 
     @Override
-    public void addMessage(Message message) {
+    public boolean addMessage(Message message) {
         try(
                 FileOutputStream fos = new FileOutputStream(FILE_NAME_SAVE_MESSAGES, true);
                 PrintStream printStream = new PrintStream(fos);
                 ) {
             printStream.println(MessageHelper.messageToJSONObject(message));
+            return true;
         }catch (IOException e){
             logger.info("error save to file");
         }
+        return false;
     }
 
     @Override

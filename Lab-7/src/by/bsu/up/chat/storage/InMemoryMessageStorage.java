@@ -39,16 +39,17 @@ public class InMemoryMessageStorage implements MessageStorage {
     }
 
     @Override
-    public void addMessage(Message message) {
+    public boolean addMessage(Message message) {
 
         for(Message item : messages){
             if(item.getId().equals(message.getId())){
                 logger.info("error add message");
-                return;
+                return false;
             }
         }
         messages.add(message);
         fileMessageStorage.addMessage(message);
+        return true;
     }
 
     @Override
