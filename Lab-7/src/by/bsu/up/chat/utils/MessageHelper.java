@@ -118,7 +118,7 @@ public class MessageHelper {
     }
 
     public static Message jsonObjectToMessage(JSONObject jsonObject){
-        String id = ((String) jsonObject.get(Constants.Message.FIELD_ID));
+        String id = ((String) jsonObject.get(Constants.Message.FIELD_ID).toString());
         String author = ((String) jsonObject.get(Constants.Message.FIELD_AUTHOR));
         long timestamp = ((long) jsonObject.get(Constants.Message.FIELD_TIMESTAMP));
         String text = ((String) jsonObject.get(Constants.Message.FIELD_TEXT));

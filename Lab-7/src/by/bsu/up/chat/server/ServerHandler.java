@@ -6,7 +6,6 @@ import by.bsu.up.chat.common.models.Message;
 import by.bsu.up.chat.logging.Logger;
 import by.bsu.up.chat.logging.impl.Log;
 import by.bsu.up.chat.storage.InMemoryMessageStorage;
-import by.bsu.up.chat.storage.MessageStorage;
 import by.bsu.up.chat.storage.Portion;
 import by.bsu.up.chat.utils.MessageHelper;
 import by.bsu.up.chat.utils.StringUtils;
@@ -42,10 +41,7 @@ public class ServerHandler implements HttpHandler {
         try {
             response = dispatch(httpExchange);
         } catch (Throwable e) {
-            // WARNING! It's not a good practice to catch all exceptions via Throwable
-            // or Exception classes. But if you want to handle and you know
-            // how to handle them correctly, you may use such approach.
-            // Useful when you use thread pool and don't want to corrupt a thread
+
             logger.error("An error occurred when dispatching request.", e);
             response = new Response(Constants.RESPONSE_CODE_INTERNAL_SERVER_ERROR, "Error while dispatching message");
         }
@@ -53,7 +49,7 @@ public class ServerHandler implements HttpHandler {
 
     }
 
-    private Response dispatch(HttpExchange httpExchange) {
+    private Response dispatch(HttpExchange httpExchange) throws ParseException {
         if (Constants.REQUEST_METHOD_GET.equals(httpExchange.getRequestMethod())) {
             return doGet(httpExchange);
         } else if (Constants.REQUEST_METHOD_POST.equals(httpExchange.getRequestMethod())) {
@@ -71,6 +67,7 @@ public class ServerHandler implements HttpHandler {
     }
 
     private Response doGet(HttpExchange httpExchange) {
+
         String query = httpExchange.getRequestURI().getQuery();
         if (query == null) {
             return Response.badRequest("Absent query in request");
@@ -86,6 +83,7 @@ public class ServerHandler implements HttpHandler {
                 return Response.badRequest(
                         String.format("Incorrect token in request: %s. Server does not have so many messages", token));
             }
+
             Portion portion = new Portion(index);
             List<Message> messages = messageStorage.getPortion(portion);
             String responseBody = MessageHelper.buildServerResponseBody(messages, messageStorage.size());
@@ -139,11 +137,13 @@ public class ServerHandler implements HttpHandler {
         return Response.withCode(Constants.RESPONSE_CODE_NOT_IMPLEMENTED);
     }
 
-    private Response doDelete(HttpExchange httpExchange) {
+    private Response doDelete(HttpExchange httpExchange) throws ParseException {
 
-        String query = httpExchange.getRequestURI().getQuery();
+        String requestString = MessageHelper.inputStreamToString(httpExchange.getRequestBody());
 
-        String messageId = query.substring(Constants.REQUEST_PARAM_MESSAGE_ID.length() + 1, query.length());
+        JSONObject jsonObject = MessageHelper.stringToJsonObject(requestString);
+
+        String messageId = (String) jsonObject.get("id");
 
         if(messageId != null && !messageId.equals("")){
             try {
@@ -170,11 +170,7 @@ public class ServerHandler implements HttpHandler {
             httpExchange.sendResponseHeaders(response.getStatusCode(), bytes.length);
 
             os.write( bytes);
-            // there is no need to close stream manually
-            // as try-catch with auto-closable is used
-            /**
-             * {@see http://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html}
-             */
+
         } catch (IOException e) {
             logger.error("Could not send response", e);
         }

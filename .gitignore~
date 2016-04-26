@@ -2,9 +2,9 @@
 .idea/
 out/
 target/
+/**/*.class/
 /**/*.iml/
 /**/.idea/
 /**/out/
-/**/target/
-
+/webchatapp/target/
 

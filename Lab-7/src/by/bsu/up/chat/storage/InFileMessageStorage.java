@@ -22,7 +22,7 @@ public class InFileMessageStorage implements MessageStorage {
 
     private static final Logger logger = Log.create(InMemoryMessageStorage.class);
 
-    private static final String FILE_NAME_SAVE_MESSAGES = "src/files/log.txt";
+    private static final String FILE_NAME_SAVE_MESSAGES = "Lab-7/src/files/log.txt";
 
     @Override
     public List<Message> getPortion(Portion portion) {

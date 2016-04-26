@@ -1,9 +1,21 @@
-var messagesList = [];
+var application = {
+    mainURL: "http://127.0.1.1:4554/chat",
+    token: "TN11EN",
+    messageList: []
+};
+
 var username;
-var counter = 0;
 
 var LOCAL_STORAGE_USERNAME = "chat username";
-var LOCAL_STORAGE_MESSAGE_LIST = "message list";
+
+function newMessage(name, text, time, id){
+    return{
+        author: name,
+        text: text,
+        timestamp: time,
+        id: id
+    };
+}
 
 function run(){
     var appContainer = document.getElementsByClassName('container')[0];
@@ -14,14 +26,16 @@ function run(){
     username = localStorage.getItem(LOCAL_STORAGE_USERNAME);
     editLogin(username);
 
-    messagesList = restoreMessages() || [];
-    render(messagesList);
+
+    loadMessages(function () {
+        render(application);
+    });
 
 }
 
 function delegateEvent(evtObj){
     if(evtObj.type == 'click' && evtObj.target.classList.contains('add-button')){
-        addMessage();
+        onAddMessageButtonClick();
     }
     if(evtObj.type == 'click' && evtObj.target.classList.contains('edit-name-button')){
         editUserName();
@@ -29,71 +43,185 @@ function delegateEvent(evtObj){
     
 }
 
-function addMessage(){
-    var textMessage = document.getElementById("textMessage");
-    var newmessage = newMessage(username, textMessage.value, true);
-    messagesList.push(newmessage);
-    saveMessages();
-    renderMessage(newmessage);
-    textMessage.value = "";
+function onAddMessageButtonClick(){
+    var messageText = messageTextValue();
 
+    addMessage(messageText, function () {
+        render(application);
+    })
 }
 
-function render(messages){
-    for(var i = 0; i < messages.length; i++){
-        renderMessage(messages[i]);
+function loadMessages(done){
+    var url = application.mainURL + "?token=" + application.token;
+
+    ajax("GET", url, null, function (responseText) {
+        var response = JSON.parse(responseText);
+
+        application.messageList = response.messages;
+        application.token = response.token;
+
+        done();
+    });
+}
+
+function addMessage(text, done){
+
+    if(text == '' || text == null){
+        return;
     }
+
+    var message = newMessage(username, text, new Date().getMilliseconds(), uniqueId());
+
+    ajax('POST', application.mainURL, JSON.stringify(message), function () {
+        application.messageList.push(message);
+        done();
+    })
+
 }
 
-function renderMessage(message){
-    var messages = document.getElementsByClassName("messages")[0];
-    var temp = elementFromTemplate();
-    renderMessageState(temp, message);
-    messages.appendChild(temp);
-    counter++;
+function deleteMessage(id, done){
+    
+}
+
+function onDeleteClick(element){
+    var id = idFromElement(element.parentNode.parentNode);
+
+    deleteMessage(id, function () {
+        render(application);
+    })
+}
+
+function indexById(list, id){
+    for(var i = 0; i < list.length; i++){
+        if(list[i].id == id){
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+function render(root){
+
+    var messages = document.getElementsByClassName('messages')[0];
+
+    var messageMap = root.messageList.reduce(function (accumulator, message) {
+        accumulator[message.id] = message;
+
+        return accumulator;
+    }, {});
+
+    console.log(messages);
+
+    var notFound = updateListMessages(messages, messageMap);
+    removeFromList(messages, notFound);
+    appendToList(messages, root.messageList, messageMap);
+}
+
+function idFromElement(element){
+    return element.attributes['data-message-id'].value;
+}
+
+function messageTextValue(){
+    var messageInputElement = document.getElementById('textMessage');
+
+    var textInput = messageInputElement.value;
+
+    messageInputElement.value = "";
+
+    return textInput;
 }
 
 function renderMessageState(template, message){
-    template.setAttribute("data-task-id", counter.toString());
+    template.setAttribute("data-message-id", message.id);
 
     var name = template.getElementsByClassName("name")[0];
-    console.log(message.name);
-    name.textContent = message.name;
+    name.textContent = message.author;
 
     var text = template.getElementsByClassName("text")[0];
     text.innerHTML = message.text;
 
-    if(!message.me){
+    /*if(!message.me){
         template.className = "";
         var deleteAndEdit = template.getElementsByClassName("delete-and-edit")[0];
         deleteAndEdit.innerHTML = "<span class='msg-time'>5:00 pm</span>";
-    }else{
+    }else{*/
         template.className = "me";
         var deleteAndEdit = template.getElementsByClassName("delete-and-edit")[0];
-        deleteAndEdit.innerHTML = "<span onclick='deleteMessage(this)' class='glyphicon glyphicon-trash'></span>" +
+        deleteAndEdit.innerHTML = "<span onclick='onDeleteClick(this)' class='glyphicon glyphicon-trash'></span>" +
             "<span onclick='editMessageInput(this)' class='glyphicon glyphicon-pencil'></span>" +
             "<span class='msg-time'>5:00 pm</span>";
-    }
+
 
     template.setAttribute("style", "");
 }
 
+function updateListMessages(element, itemMap){
+
+    var children = element.children;
+    var notFound = [];
+
+    for(var i = 0; i < children.length; i++){
+        var child = children[i];
+
+        var id = child.attributes['data-message-id'].value;
+
+        var item = itemMap[id];
+
+        if(item == null){
+            notFound.push(child);
+            continue;
+        }
+        renderMessageState(child, item);
+        itemMap[i] = null;
+    }
+
+    return notFound;
+}
+
+function appendToList(element, items, itemMap){
+
+    removeFromList(element.children, items);
+
+    /*for(var i = 0; i < items.length; i++){
+
+        var child = children[i];
+
+        console.log(child);
+
+        if(child.attributes['data-message-id'].value == items[i]){
+            element.removeChild(child);
+        }
+
+    }*/
+
+
+    for(var i = 0; i < items.length; i++){
+        var item = items[i];
+
+        if(itemMap[item.id] == null){
+
+            continue;
+        }
+
+        var child = elementFromTemplate();
+
+        renderMessageState(child, item);
+        element.appendChild(child);
+    }
+}
+
+function removeFromList(element, children) {
+
+    for(var i = 0; i < children.length; i++){
+        element.removeChild(children[i]);
+    }
+}
+
 function elementFromTemplate(){
     var template = document.getElementById("template");
-    return template.cloneNode(true);
-}
 
-function editUserNameInput(text){
-    var nameuser = document.getElementsByClassName("me-list")[0];
-    nameuser.innerHTML = '<input type="text" id="editUserNameText">' +
-        '<input type="button" class="edit-name-button" value="edit">';
-}
-
-function editUserName(){
-
-    var newname = document.getElementById('editUserNameText');
-    username = newname.value;
-    editLogin(username);
+    return template.firstElementChild.cloneNode(true);
 }
 
 function editLogin(login){
@@ -103,27 +231,12 @@ function editLogin(login){
     saveName(login);
 }
 
-function newMessage(name, text, me){
-    return{
-        name: name,
-        text: text,
-        me: !!me,
-        id: counter
-    };
-}
-
-function deleteMessage(element){
-    var message = element.parentNode.parentNode;
-    var index = message.getAttribute("data-task-id");
-    messagesList.splice(index, 1);
-    message.parentElement.removeChild(message);
-    saveMessages();
-}
-
 function loginInput(){
     username = document.getElementById("input_name").value;
     if((username != '') && (username != null)){
         saveName(username);
+        location.href = 'homepage.html';
+
     }else{
         saveName("default");
     }
@@ -135,37 +248,84 @@ function saveName(login){
     localStorage.setItem(LOCAL_STORAGE_USERNAME, login);
 }
 
-function saveMessages(){
-    localStorage.setItem(LOCAL_STORAGE_MESSAGE_LIST, JSON.stringify(messagesList));
+function defaultErrorHandle(message){
+    //console.error(message);
+    outputError();
 }
 
-function restoreMessages(){
-    var item = localStorage.getItem(LOCAL_STORAGE_MESSAGE_LIST);
-    return item && JSON.parse(item);
-}
-
-function editMessageInput(element){
-    var message = element.parentNode.parentNode;
-
-    var input = message.getElementsByClassName("message")[0];
-    input.innerHTML = '<input type="text" class = "input_new_message" id="editMessageText">' +
-        '<input type="button" class="edit-message-button" onclick="editMessage(this)" value="edit">';
-
-}
-
-function editMessage(element){
-    var newTextMessage = document.getElementById('editMessageText');
-    var text = element.parentNode;
-    text.innerHTML = '<p class="text">'+newTextMessage.value+'</p>';
-
-    var message = text.parentNode;
-    console.log(message);
-
-    var index = message.getAttribute("data-task-id");
-
-    for(var i = 0; i < messagesList.length; i++){
-        if(messagesList[i].id == index){
-            messagesList[i].text = newTextMessage.value;
-        }
+function isError(text){
+    if(text == ''){
+        return false;
     }
+
+    try {
+        var obj = JSON.parse(text);
+    }catch (ex){
+        return true;
+    }
+
+    return !!obj.error;
+}
+
+function outputError(){
+    var elementError = document.getElementsByClassName('error')[0];
+
+    elementError.setAttribute('style', '');
+
+}
+
+function ajax(method, url, data, continueWith, continueWithError){
+
+    var xhr = new XMLHttpRequest();
+
+    continueWithError = continueWithError || defaultErrorHandle;
+
+    xhr.open(method || 'GET', url, true);
+
+    xhr.onload = function () {
+
+        if(xhr.readyState !== 4){
+            return;
+        }
+
+        if(xhr.status != 200){
+            continueWithError("error on the server side, response " + xhr.status);
+            return;
+        }
+
+        if(isError(xhr.responseText)){
+            continueWithError("Error on the server side, response " + xhr.status);
+            return;
+        }
+
+        continueWith(xhr.responseText);
+
+    };
+
+    xhr.ontimeout = function () {
+        continueWithError("Server timeout!");
+
+    };
+
+    xhr.onerror = function (e) {
+        var errorMessage = 'Server connection error !\n'+
+            '\n' +
+            'Check if \n'+
+            '- server is active\n'+
+            '- server sends header "Access-Control-Allow-Origin:*"\n'+
+            '- server sends header "Access-Control-Allow-Methods: PUT, DELETE, POST, GET, OPTIONS"\n';
+
+        continueWithError(errorMessage);
+
+    };
+
+    xhr.send(data);
+
+}
+
+function uniqueId(){
+    var date = Date.now();
+    var random = Math.random()*Math.random();
+
+    return Math.floor(date*random);
 }
