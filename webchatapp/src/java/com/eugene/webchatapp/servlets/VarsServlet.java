@@ -1,11 +1,14 @@
 package com.eugene.webchatapp.servlets;
 
+import com.eugene.webchatapp.encryption.HashCode;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by eugene on 25.04.16.
