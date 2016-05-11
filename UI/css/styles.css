@@ -271,6 +271,7 @@ ul.tabs-container{
 .delete-and-edit{
     display: flex;
     justify-content: flex-end;
+    max-width: 15%;
 }
 
  .me .delete-and-edit{
@@ -299,7 +300,29 @@ ul.tabs-container{
     padding: 10px;
 }
 
+.edit-text{
+    width: 100%;
+    height: 100%;
+    margin: 5px;
+}
 
+.edit-text-input, .edit-button-input{
+    border-radius: 6px;
+    margin: 0;
+    border: 0;
+}
+
+.edit-text-input{
+
+    width: 80%;
+}
+
+.edit-button-input{
+    width: 20%;
+
+    color: #5D7185;
+
+}
 
 @media only screen  {
     .window-wrapper{

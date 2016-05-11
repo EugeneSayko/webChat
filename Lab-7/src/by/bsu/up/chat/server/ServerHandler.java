@@ -86,6 +86,7 @@ public class ServerHandler implements HttpHandler {
 
             Portion portion = new Portion(index);
             List<Message> messages = messageStorage.getPortion(portion);
+
             String responseBody = MessageHelper.buildServerResponseBody(messages, messageStorage.size());
             return Response.ok(responseBody);
         } catch (InvalidTokenException e) {

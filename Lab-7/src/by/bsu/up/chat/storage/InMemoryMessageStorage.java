@@ -58,8 +58,14 @@ public class InMemoryMessageStorage implements MessageStorage {
         for(int i = 0; i < messages.size(); i++){
             if(messages.get(i).getId().equals(message.getId())){
 
+                logger.info("message updated");
+                logger.info("author: " + messages.get(i).getAuthor());
+                logger.info("old text: "+messages.get(i).getText());
+                logger.info("new text: "+message.getText());
+
                 messages.get(i).setText(message.getText());
                 fileMessageStorage.updateMessage(message);
+
                 return true;
             }
         }
@@ -77,10 +83,10 @@ public class InMemoryMessageStorage implements MessageStorage {
 
                 iterator.remove();
 
+                fileMessageStorage.removeMessage(messageId);
+
                 logger.info("message deleted");
                 logger.info(message.getAuthor() + ": " + message.getText());
-
-                fileMessageStorage.removeMessage(messageId);
 
                 return true;
             }

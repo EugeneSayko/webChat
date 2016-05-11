@@ -1,3 +1,4 @@
+/*
 var application = {
     mainURL: "http://127.0.1.1:4554/chat",
     token: "TN11EN",
@@ -141,11 +142,11 @@ function renderMessageState(template, message){
     var text = template.getElementsByClassName("text")[0];
     text.innerHTML = message.text;
 
-    /*if(!message.me){
+    /!*if(!message.me){
         template.className = "";
         var deleteAndEdit = template.getElementsByClassName("delete-and-edit")[0];
         deleteAndEdit.innerHTML = "<span class='msg-time'>5:00 pm</span>";
-    }else{*/
+    }else{*!/
         template.className = "me";
         var deleteAndEdit = template.getElementsByClassName("delete-and-edit")[0];
         deleteAndEdit.innerHTML = "<span onclick='onDeleteClick(this)' class='glyphicon glyphicon-trash'></span>" +
@@ -183,7 +184,7 @@ function appendToList(element, items, itemMap){
 
     removeFromList(element.children, items);
 
-    /*for(var i = 0; i < items.length; i++){
+    /!*for(var i = 0; i < items.length; i++){
 
         var child = children[i];
 
@@ -193,7 +194,7 @@ function appendToList(element, items, itemMap){
             element.removeChild(child);
         }
 
-    }*/
+    }*!/
 
 
     for(var i = 0; i < items.length; i++){
@@ -329,3 +330,4 @@ function uniqueId(){
 
     return Math.floor(date*random);
 }
+*/
