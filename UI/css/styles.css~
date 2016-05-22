@@ -192,7 +192,8 @@ body{
 .input-wrapper{
     display: flex;
     width: 85%;
-    border-bottom: 1px solid #bfc6e1;
+    border-bottom: 1px solid #cfdae1;
+    border-radius: 5px;
     margin-right: 1%;
 }
 
@@ -206,19 +207,12 @@ body{
 
 .input-area .input-wrapper input{
 	
-    border: 0;
     margin: 0;
     padding: 0 1%;
-
-    background-color: #e4eaee;
-    border: none;
+   
     color: #5D7185;
     width: 100%;
-    float:right;
-    cursor: pointer;
-    outline: none;
-    border-radius: 4px;
-
+background: #e4eaee;
 }
 
 .input-area > input{

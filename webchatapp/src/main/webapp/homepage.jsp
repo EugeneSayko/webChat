@@ -15,7 +15,7 @@
         <%@include file="css/styles.css"%>
     </style>
 
-    <script src="js/todo.js" ></script>
+    <script src="js/scrypt.js" ></script>
 
 </head>
 
@@ -47,7 +47,7 @@
                 </div>
                 <div class="input-area">
                     <div class="input-wrapper">
-                        <input type="text" value="" id="textMessage">
+                        <input type="text" value="" id="textMessage" placeholder="Enter your message...">
                     </div>
                     <input type="button" value="Send" class="add-button">
                 </div>
@@ -58,14 +58,9 @@
                     <li class="active">
                         <ul class="member-list">
                             <li class="me-list">
-                                <span class="myName">Eugene Sayko</span>
-                                <a  class="editUserName" id="editUserName" onclick="editUserNameInput(this)">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </a>
+
                             </li>
-                            <li></span><span>User1</span></li>
-                            <li></span><span>User2</span></li>
-                            <li></span><span>User3</span></li>
+
                         </ul>
                     </li>
                 </ul>
@@ -82,7 +77,7 @@
 
 <div id="template">
 
-    <li class="me" style="display: none" data-message-id="id">
+    <li style="display: none" data-message-id="id">
         <div class="name">
             <span class="name">nameuser</span>
         </div>

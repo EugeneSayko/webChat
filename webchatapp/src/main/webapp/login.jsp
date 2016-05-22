@@ -13,7 +13,10 @@
 
         <%@include file='css/bootstrap.css' %>
         <%@include file='css/signin.css' %>
+
     </style>
+
+    <script src="js/scrypt.js" ></script>
 
 </head>
 
@@ -24,12 +27,14 @@
 
         <div class="cover-container">
 
+
+
             <div class="inner cover">
                 <form class="form-signin" action="/login" method="post">
-                    <h2 class="form-signin-heading">Hello. Sign in.</h2>
-                    <input type="text" class="form-control" name="username" placeholder="login" required autofocus>
+                    <h2 class="form-signin-heading">Hello. Sign in.<a href="/signup">sign up</a></h2>
+                    <input type="text" class="form-control" id="input_name" name="username" placeholder="login" required autofocus>
                     <input type="password" class="form-control" name="password" placeholder="Password" required>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">login</button>
+                    <button class="btn btn-lg btn-primary btn-block" onclick="loginInput()" type="submit">login</button>
 
                 </form>
             </div>

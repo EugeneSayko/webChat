@@ -41,6 +41,20 @@
 
 			
 
+    <li class="me" data-message-id="id">
+        <div class="name">
+            <span class="name">nameuser</span>
+        </div>
+        <div class="message">
+            <p class="text">kdfljg;dlfkjgd;flgkjdf;lkjfgb;lkfjgb;lfkjbf;lkgbjfl;kgbjfg;bklf;gkbnfgbkjnfgbkjnfgbkljnfgbkjfngbkfjbnfkjbnfkjgbnfkgbnfkgbjnfkgbjnfkgbjnfkgbjnfgkbjnfgkbjnfgkbjnfgbkjnfgbkjfhnbfnmessage</p>
+        </div>
+        <div class="delete-and-edit">
+
+        </div>
+    </li>
+
+
+
                     </ul>
                 </div>
                 <div class="input-area">

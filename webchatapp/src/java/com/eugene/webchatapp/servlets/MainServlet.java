@@ -1,36 +1,42 @@
 package com.eugene.webchatapp.servlets;
 
+import com.eugene.webchatapp.encryption.HashCode;
+import com.eugene.webchatapp.storage.StaticKeyStorage;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by eugene on 27.04.16.
+ * Created by eugene on 12.05.16.
  */
 
-@WebServlet(value = "/chat")
-public class MainServlet extends HttpServlet{
+@WebServlet(value = "/")
+public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String logged = (String)req.getSession().getAttribute("isLogged");
+        Cookie[] cookies = req.getCookies();
 
-        if(logged == null){
-            req.getRequestDispatcher("/").forward(req, resp);
+        String uidParam = req.getParameter("uid");
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("uid")){
+                uidParam = cookie.getValue();
+            }
+        }
+
+        if(StaticKeyStorage.getUserByUid(uidParam) != null){
+            resp.sendRedirect("/homepage.jsp");
             return;
         }
 
-        if(logged.equals("true")){
-            req.getRequestDispatcher("homepage.jsp").forward(req, resp);
-        }else{
-            req.getRequestDispatcher("/").forward(req, resp);
-        }
-
+        req.getRequestDispatcher("login.jsp");
     }
-
 
 }
