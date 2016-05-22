@@ -119,4 +119,33 @@ public class StaticKeyStorage {
             e.printStackTrace();
         }
     }
+
+    private static void saveAllUsers(){
+        try(
+                FileOutputStream fos = new FileOutputStream(USERS_NAME_FILE);
+                PrintStream printStream = new PrintStream(fos);
+        ) {
+
+            for(User user : users){
+                printStream.println(MessageHelper.userToJSONObject(user));
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void editName(String newName, String oldName){
+
+        for(int i = 0; i < users.size(); i++){
+            if(users.get(i).getName().equals(oldName)){
+                users.get(i).setName(newName);
+                System.out.println(getUsersName());
+                saveAllUsers();
+                return;
+            }
+        }
+
+
+    }
 }

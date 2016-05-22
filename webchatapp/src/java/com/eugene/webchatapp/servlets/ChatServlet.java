@@ -98,23 +98,46 @@ public class ChatServlet extends HttpServlet{
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String message = MessageHelper.inputStreamToString(req.getInputStream());
 
-        try {
-            JSONObject jsonObject = MessageHelper.stringToJsonObject(message);
+        String query = req.getQueryString();
 
-            Message messageObj = new Message();
+        if(!query.equals("editname")){
+            try {
+                String message = MessageHelper.inputStreamToString(req.getInputStream());
 
-            messageObj.setId((String) jsonObject.get(Constants.Message.FIELD_ID));
-            messageObj.setText((String) jsonObject.get(Constants.Message.FIELD_TEXT));
-            messageObj.setAuthor("");
-            messageObj.setTimestamp(0);
+                JSONObject jsonObject = MessageHelper.stringToJsonObject(message);
 
-            messages.updateMessage(messageObj);
+                Message messageObj = new Message();
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+                messageObj.setId((String) jsonObject.get(Constants.Message.FIELD_ID));
+                messageObj.setText((String) jsonObject.get(Constants.Message.FIELD_TEXT));
+                messageObj.setAuthor("");
+                messageObj.setTimestamp(0);
+
+                messages.updateMessage(messageObj);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else{
+
+            try {
+                String requestBody = MessageHelper.inputStreamToString(req.getInputStream());
+
+                JSONObject jsonObject = MessageHelper.stringToJsonObject(requestBody);
+
+                String newName = (String) jsonObject.get("newName");
+                String oldName = (String) jsonObject.get("oldName");
+
+                StaticKeyStorage.editName(newName, oldName);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
         }
+
+
     }
 
     private Map<String, String> queryToMap(String query) {

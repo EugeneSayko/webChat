@@ -388,9 +388,19 @@ function editUserNameInput(text){
 
 function editUserName(){
 
+    var url = application.mainURL+"?editname";
+    
     var newname = document.getElementById('editUserNameText');
-    username = newname.value;
-    editLogin(username);
+    var names = {
+        newName: newname.value,
+        oldName: username
+    };
+    ajax('PUT', url, JSON.stringify(names), function () {
+        username = newname.value;
+        editLogin(username);
+        
+    });
+    
 }
 
 function editLogin(login){
