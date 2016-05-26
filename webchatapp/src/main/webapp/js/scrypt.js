@@ -1,5 +1,5 @@
 var application={
-    mainURL: "http://192.168.0.108:4554/chat",
+    mainURL: "http://192.168.0.107:4554/chat",
     token: "TN11EN",
     messageList: [],
     usersList: []
@@ -7,6 +7,7 @@ var application={
 
 var username;
 
+var intervalId;
 
 var LOCAL_STORAGE_USERNAME = "chat username";
 
@@ -36,42 +37,59 @@ function run(){
     
     editLogin(username);
 
-    loadMessage(function () {
-        render(application);
-    });
-
     loadUsers();
+
+    loadMessage();
+
+    // function sec (application,loadMessage,render){
+    //     console.log('!!!!!!!!!!');
+    //     return function(){
+    //         loadMessage(function (){
+    //             render(application);
+    //         });
+    //     }
+    // }
+    initReloader();
+}
+
+function initReloader(){
+    intervalId = setInterval(loadMessage, 1500);
+}
+
+function killReloader() {
+    if(intervalId)
+        clearInterval(intervalId);
 }
 
 function ajax(method, url, data, continueWith, continueWithError) {
     var xhr = new XMLHttpRequest();
-    
+
     continueWithError = continueWithError || defaultErrorHandle;
-    
+
     xhr.open(method || 'GET', url, true);
 
     xhr.onload = function(){
         if(xhr.readyState !== 4){
             return;
         }
-        
+
         if(xhr.status != 200){
             continueWithError("Error on the server side, response " + xhr.status);
             return;
         }
-        
+
         if(isError(xhr.responseText)){
             continueWithError("Error on the server side, response " + xhr.status);
             return;
         }
-        
+
         continueWith(xhr.responseText);
     };
-    
+
     xhr.ontimeout = function () {
         continueWithError("server timeout");
     };
-    
+
     xhr.onerror = function (e) {
         var errorMessage = 'Server connection error !\n'+
             '\n' +
@@ -80,9 +98,9 @@ function ajax(method, url, data, continueWith, continueWithError) {
             '- server sends header "Access-Control-Allow-Origin:*"\n'+
             '- server sends header "Access-Control-Allow-Methods: PUT, DELETE, POST, GET, OPTIONS"\n';
 
-        continueWithError(errorMessage);  
+        continueWithError(errorMessage);
     };
-    
+
     xhr.send(data);
 }
 
@@ -110,7 +128,9 @@ function isError(text){
     return !!obj.error;
 }
 
-function loadMessage(done){
+function loadMessage(){
+    killReloader();
+
 
     var url = application.mainURL+"?token="+application.token;
 
@@ -119,9 +139,11 @@ function loadMessage(done){
 
         application.messageList = response.messages;
 
-        application.token = response.token;
+        // application.token = response.token;
 
-        done();
+        render(application);
+
+        initReloader();
     });
 }
 
@@ -182,6 +204,7 @@ function addMessage(text, done){
         application.messageList.push(message);
         done();
     });
+    
 }
 
 function render(root){
@@ -346,6 +369,8 @@ function editMessage(element, editText, id, done){
 
     var message = application.messageList[index];
 
+    console.log(message);
+
     var messageToPut = {
         author: message.author,
         text: editText.value,
@@ -388,18 +413,28 @@ function editUserNameInput(text){
 
 function editUserName(){
 
-    var url = application.mainURL+"?editname";
+
     
     var newname = document.getElementById('editUserNameText');
-    var names = {
-        newName: newname.value,
-        oldName: username
-    };
-    ajax('PUT', url, JSON.stringify(names), function () {
-        username = newname.value;
+    
+    console.log(newname);
+    
+    if(newname.value != null && newname.value != ''){
+
+        var url = application.mainURL+"?editname";
+
+        var names = {
+            newName: newname.value,
+            oldName: username
+        };
+        ajax('PUT', url, JSON.stringify(names), function () {
+            username = newname.value;
+            editLogin(username);
+
+        });
+    }else{
         editLogin(username);
-        
-    });
+    }
     
 }
 

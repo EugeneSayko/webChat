@@ -1,6 +1,7 @@
 package com.eugene.webchatapp.servlets;
 
 import com.eugene.webchatapp.encryption.HashCode;
+import com.eugene.webchatapp.models.Message;
 import com.eugene.webchatapp.storage.StaticKeyStorage;
 
 import javax.servlet.ServletConfig;

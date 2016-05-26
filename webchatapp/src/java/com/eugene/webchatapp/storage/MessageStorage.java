@@ -38,4 +38,6 @@ public interface MessageStorage {
      * @return the amount of stored messages
      */
     int size();
+
+
 }

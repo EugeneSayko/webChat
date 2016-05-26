@@ -6,7 +6,6 @@ import com.eugene.webchatapp.storage.InMemoryMessageStorage;
 import com.eugene.webchatapp.storage.Portion;
 import com.eugene.webchatapp.storage.StaticKeyStorage;
 import com.eugene.webchatapp.utils.MessageHelper;
-import com.eugene.webchatapp.utils.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
@@ -16,16 +15,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by eugene on 27.04.16.
  */
 
-@WebServlet(value = "/chat")
+@WebServlet(value = "/chat", asyncSupported = true)
 public class ChatServlet extends HttpServlet{
 
     private InMemoryMessageStorage messages;
@@ -40,7 +36,6 @@ public class ChatServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
         String query = req.getQueryString();
 
         if(query == null || query.equals("")){
@@ -48,16 +43,18 @@ public class ChatServlet extends HttpServlet{
         }
 
         if(!query.contains("users")){
+
             Map<String, String> map = queryToMap(query);
 
             String token = map.get(Constants.REQUEST_PARAM_TOKEN);
+
             int index = MessageHelper.parseToken(token);
 
             Portion portion = new Portion(index);
             String responseBody = MessageHelper.buildServerResponseBody(messages.getPortion(portion), messages.size());
 
-//        req.getRequestDispatcher("homepage.jsp").forward(req, resp);
             resp.getOutputStream().write(responseBody.getBytes());
+
         }else{
 
             String responseBodyUsers = MessageHelper.buildServerResponseBodyUsers(StaticKeyStorage.getUsersName());
@@ -101,7 +98,7 @@ public class ChatServlet extends HttpServlet{
 
         String query = req.getQueryString();
 
-        if(!query.equals("editname")){
+        if(query == null || !query.equals("editname")){
             try {
                 String message = MessageHelper.inputStreamToString(req.getInputStream());
 
@@ -122,6 +119,7 @@ public class ChatServlet extends HttpServlet{
         }else{
 
             try {
+
                 String requestBody = MessageHelper.inputStreamToString(req.getInputStream());
 
                 JSONObject jsonObject = MessageHelper.stringToJsonObject(requestBody);
@@ -129,7 +127,10 @@ public class ChatServlet extends HttpServlet{
                 String newName = (String) jsonObject.get("newName");
                 String oldName = (String) jsonObject.get("oldName");
 
-                StaticKeyStorage.editName(newName, oldName);
+                if(!StaticKeyStorage.isUser(newName)){
+                    StaticKeyStorage.editName(newName, oldName);
+                }
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }

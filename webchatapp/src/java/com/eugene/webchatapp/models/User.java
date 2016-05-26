@@ -3,24 +3,19 @@ package com.eugene.webchatapp.models;
 /**
  * Created by eugene on 18.05.16.
  */
-public class User {
+public class User extends Entity {
 
-    private String id;
     private String name;
     private String password;
 
+    public User(){
+
+    }
+
     public User(String id, String name, String password) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.password = password;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

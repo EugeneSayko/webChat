@@ -62,8 +62,11 @@ public class SignUpServlet extends HttpServlet {
             return;
         }
 
-        StaticKeyStorage.addUser(username, password);
+        if(StaticKeyStorage.addUser(username, password)){
+            resp.sendRedirect("/homepage.jsp");
+        }else{
+            resp.sendRedirect("/signup.html");
+        }
 
-        resp.sendRedirect("/homepage.jsp");
     }
 }

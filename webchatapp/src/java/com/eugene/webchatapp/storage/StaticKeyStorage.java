@@ -1,5 +1,6 @@
 package com.eugene.webchatapp.storage;
 
+import com.eugene.webchatapp.DAO.UserDAO;
 import com.eugene.webchatapp.models.User;
 import com.eugene.webchatapp.utils.MessageHelper;
 import org.json.simple.JSONObject;
@@ -19,8 +20,13 @@ public class StaticKeyStorage {
 
     private static List<User> users = new ArrayList<>();
 
+    private static UserDAO userDAO;
+
     static {
-        loadUsers();
+        userDAO = new UserDAO();
+        //loadUsers();
+        findAllUsers();
+
     }
 
     public static String getByUsername(String username){
@@ -66,22 +72,26 @@ public class StaticKeyStorage {
     }
 
     public static List<String> getUsersName(){
-        List<String> names = new ArrayList<>();
+        /*List<String> names = new ArrayList<>();
 
         for(User user : users){
             names.add(user.getName());
         }
 
-        return names;
+        return names;*/
+
+        return userDAO.findName();
     }
 
-    public static void addUser(String username, String password){
-        String token = "token-u$#" + (users.size() + 1);
+    public static boolean addUser(String username, String password){
+        String token = "token-u$#" + System.nanoTime();
 
         User user = new User(token, username, password);
 
         users.add(user);
-        saveUser(user);
+        //saveUser(user);
+
+        return userDAO.insertUser(user);
     }
 
     private static void loadUsers(){
@@ -139,13 +149,20 @@ public class StaticKeyStorage {
 
         for(int i = 0; i < users.size(); i++){
             if(users.get(i).getName().equals(oldName)){
-                users.get(i).setName(newName);
-                System.out.println(getUsersName());
-                saveAllUsers();
-                return;
+
+                if(userDAO.updateName(oldName, newName)){
+                    users.get(i).setName(newName);
+                    //saveAllUsers();
+                    return;
+                }
+
             }
         }
 
 
+    }
+
+    private static void findAllUsers(){
+        users.addAll(userDAO.findAll());
     }
 }

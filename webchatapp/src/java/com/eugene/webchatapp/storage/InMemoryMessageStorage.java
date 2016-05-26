@@ -18,6 +18,7 @@ public class InMemoryMessageStorage implements MessageStorage {
     public InMemoryMessageStorage(){
         messages = new ArrayList<>();
         fileMessageStorage = new InFileMessageStorage();
+        loadMessages();
     }
 
     @Override
@@ -94,5 +95,9 @@ public class InMemoryMessageStorage implements MessageStorage {
     @Override
     public int size() {
         return messages.size();
+    }
+
+    public List<Message> getMessages(){
+        return messages;
     }
 }

@@ -120,7 +120,7 @@ body{
     align-content: center;
     flex-basis: 30%;
     height: 30%;
-        border-top: 1px solid #cfdae1;
+    border-top: 1px solid #cfdae1;
     overflow: hidden;
     min-height: 30px;
 }
