@@ -1,5 +1,6 @@
 package com.eugene.webchatapp.storage;
 
+import com.eugene.webchatapp.DAO.MessageDAO;
 import com.eugene.webchatapp.models.Message;
 
 import java.io.*;
@@ -15,9 +16,12 @@ public class InMemoryMessageStorage implements MessageStorage {
 
     private InFileMessageStorage fileMessageStorage;
 
+    private MessageDAO messageDAO;
+
     public InMemoryMessageStorage(){
         messages = new ArrayList<>();
         fileMessageStorage = new InFileMessageStorage();
+        messageDAO = new MessageDAO();
         loadMessages();
     }
 
@@ -45,7 +49,8 @@ public class InMemoryMessageStorage implements MessageStorage {
             }
         }
         messages.add(message);
-        fileMessageStorage.addMessage(message);
+        //fileMessageStorage.addMessage(message);
+        messageDAO.insertMessage(message);
         return true;
     }
 
@@ -55,10 +60,11 @@ public class InMemoryMessageStorage implements MessageStorage {
         for(int i = 0; i < messages.size(); i++){
             if(messages.get(i).getId().equals(message.getId())){
 
-                messages.get(i).setText(message.getText());
-                fileMessageStorage.updateMessage(message);
-
-                return true;
+                if(messageDAO.update(messages.get(i).getText(), message.getText())){
+                    messages.get(i).setText(message.getText());
+                    return true;
+                }
+                //fileMessageStorage.updateMessage(message);
             }
         }
 
@@ -66,18 +72,18 @@ public class InMemoryMessageStorage implements MessageStorage {
     }
 
     @Override
-    public synchronized boolean removeMessage(String messageId) throws FileNotFoundException {
-        Iterator<Message> iterator = messages.iterator();
+    public boolean removeMessage(String messageId) throws FileNotFoundException {
 
+        Iterator<Message> iterator = messages.iterator();
         while(iterator.hasNext()){
             Message message = iterator.next();
             if(message.getId().equals(messageId)){
 
-                iterator.remove();
-
-                fileMessageStorage.removeMessage(messageId);
-
-                return true;
+                if(messageDAO.delete(messageId)){
+                    iterator.remove();
+                    return true;
+                }
+                //fileMessageStorage.removeMessage(messageId);
             }
         }
 
@@ -85,11 +91,13 @@ public class InMemoryMessageStorage implements MessageStorage {
     }
 
     public void loadMessages(){
-        try {
+        /*try {
             messages.addAll(fileMessageStorage.getMessagesFromFile());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        messages.addAll(messageDAO.findAll());
     }
 
     @Override

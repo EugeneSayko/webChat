@@ -26,27 +26,28 @@ public class StaticKeyStorage {
         userDAO = new UserDAO();
         //loadUsers();
         findAllUsers();
-
     }
 
     public static String getByUsername(String username){
-        for(User user : users){
+        /*for(User user : users){
             if(user.getName().equals(username)){
                 return user.getId();
             }
         }
 
-        return null;
+        return null;*/
+        return userDAO.findByName(username);
     }
 
     public static String getUserByUid(String uid){
 
-        for(User user : users){
+        /*for(User user : users){
             if(user.getId().equals(uid)){
                 return user.getName();
             }
         }
-        return null;
+        return null;*/
+        return userDAO.findById(uid);
     }
 
     public static boolean isPassword(String username, String password){
@@ -62,6 +63,7 @@ public class StaticKeyStorage {
     }
 
     public static boolean isUser(String username){
+
         for(User user : users){
             if(user.getName().equals(username)){
                 return true;

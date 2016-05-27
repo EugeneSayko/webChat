@@ -2,10 +2,7 @@ package com.eugene.webchatapp.DAO;
 
 import com.eugene.webchatapp.models.User;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +15,17 @@ public class UserDAO {
     private static final String SQL_ALL_SELECT = "SELECT * FROM users";
     private static final String SQL_NAME_SELECT = "SELECT name FROM users";
     private static final String SQL_UPDATE_NAME = "UPDATE users set name=? where name=?";
-
+    private static final String SQL_NAME_SELECT_BY_ID = "SELECT name FROM users WHERE id = ?";
+    private static final String SQL_ID_SELECT_BY_NAME = "SELECT id FROM users WHERE name = ?";
 
     public boolean insertUser(User user){
 
         boolean flag = false;
 
-        try {
-            PreparedStatement ps = ConnectorDB.getConnection().prepareStatement(SQL_INSERT);
+        try(
+                PreparedStatement ps = ConnectorDB.getConnection().prepareStatement(SQL_INSERT);
+                ) {
+
 
             ps.setString(1, user.getId());
             ps.setString(2, user.getName());
@@ -92,8 +92,10 @@ public class UserDAO {
     public boolean updateName(String oldName, String newName){
         boolean flag = false;
 
-        try {
-            PreparedStatement ps = ConnectorDB.getConnection().prepareStatement(SQL_UPDATE_NAME);
+        try(
+                PreparedStatement ps = ConnectorDB.getConnection().prepareStatement(SQL_UPDATE_NAME);
+                ) {
+
 
             ps.setString(1, newName);
             ps.setString(2, oldName);
@@ -106,5 +108,54 @@ public class UserDAO {
         }
 
         return flag;
+    }
+
+    public String findById(String id){
+
+        String name = null;
+
+        try(
+                PreparedStatement preparedStatement = ConnectorDB.getConnection().prepareStatement(SQL_NAME_SELECT_BY_ID);
+
+                ) {
+
+            preparedStatement.setString(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                name = resultSet.getString("name");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return name;
+    }
+
+    public String findByName(String name){
+
+        String id = null;
+
+        try(
+                PreparedStatement preparedStatement = ConnectorDB.getConnection().prepareStatement(SQL_ID_SELECT_BY_NAME);
+
+        ) {
+
+            preparedStatement.setString(1, name);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                id = resultSet.getString("id");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+
     }
 }
