@@ -1,5 +1,0 @@
-{"author":"dfhdj","id":"532598447475","text":"nvnbmnm","timestamp":259}
-{"author":"Eugene","id":"226526283266","text":"hello","timestamp":759}
-{"author":"Eugene","id":"238031213582","text":"n,mn,mn","timestamp":1462981918709}
-{"author":"dfdfdf","id":"754649549178","text":"hkjhkjhkjh","timestamp":1462982042329}
-{"author":"dfhgjdfh","id":"425277720998","text":"nkjnkjn","timestamp":1462994276000}
