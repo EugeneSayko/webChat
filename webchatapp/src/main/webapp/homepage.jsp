@@ -36,7 +36,10 @@
                         <span class="glyphicon glyphicon-warning-sign"></span>
                         Error Server
                     </p>
-                    <span class="glyphicon glyphicon-search"></span>
+                    <div class="search">
+                        <input type="text" name="search-text" id="search-text" placeholder="Enter text to search ...">
+                        <span class="glyphicon glyphicon-search" onclick="searchClick()"></span>
+                    </div>
                 </div>
                 <div class="chat-list">
                     <ul class="messages">

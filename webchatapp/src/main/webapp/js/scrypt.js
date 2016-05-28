@@ -1,5 +1,5 @@
 var application={
-    mainURL: "http://192.168.0.107:4554/chat",
+    mainURL: "http://localhost:4554/chat",
     token: "TN11EN",
     messageList: [],
     usersList: []
@@ -200,7 +200,9 @@ function addMessage(text, done){
 
     var message = newMessage(username, text, Date.now());
 
-    ajax("POST", application.mainURL, JSON.stringify(message), function(){
+    var url = application.mainURL+"?add";
+    
+    ajax("POST", url, JSON.stringify(message), function(){
         application.messageList.push(message);
         done();
     });
@@ -445,4 +447,14 @@ function editLogin(login){
         '<a href="/logout" class="editUserName" id="editUserName">' +
         '<span class="glyphicon glyphicon-off"></span></a>';
     saveName(login);
+}
+
+function searchClick(){
+    var textSearch = document.getElementById("search-text");
+
+    if(textSearch.value != null && textSearch.value != ''){
+
+    }
+
+    textSearch.value = "";
 }

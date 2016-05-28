@@ -39,6 +39,7 @@ public class ChatServlet extends HttpServlet{
         String query = req.getQueryString();
 
         if(query == null || query.equals("")){
+            resp.sendRedirect("/homepage.jsp");
             return;
         }
 
