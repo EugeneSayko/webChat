@@ -49,7 +49,7 @@ function run(){
     //         });
     //     }
     // }
-    initReloader();
+    //initReloader();
 }
 
 function initReloader(){
@@ -57,8 +57,10 @@ function initReloader(){
 }
 
 function killReloader() {
-    if(intervalId)
+    if(intervalId){
         clearInterval(intervalId);
+    }
+
 }
 
 function ajax(method, url, data, continueWith, continueWithError) {
@@ -199,10 +201,9 @@ function addMessage(text, done){
     }
 
     var message = newMessage(username, text, Date.now());
-
-    var url = application.mainURL+"?add";
     
-    ajax("POST", url, JSON.stringify(message), function(){
+    
+    ajax("POST", application.mainURL, JSON.stringify(message), function(){
         application.messageList.push(message);
         done();
     });
@@ -451,9 +452,22 @@ function editLogin(login){
 
 function searchClick(){
     var textSearch = document.getElementById("search-text");
-
+    
     if(textSearch.value != null && textSearch.value != ''){
+        
+        killReloader();
+        var url = application.mainURL+"?search="+textSearch.value;
 
+        ajax("GET", url, null, function(responseText){
+            var response = JSON.parse(responseText);
+
+            application.messageList = response.messages;
+            
+            // application.token = response.token;
+
+            render(application);
+            
+        });
     }
 
     textSearch.value = "";

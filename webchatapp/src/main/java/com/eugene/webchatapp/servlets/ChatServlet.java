@@ -2,9 +2,8 @@ package com.eugene.webchatapp.servlets;
 
 import com.eugene.webchatapp.Constants;
 import com.eugene.webchatapp.models.Message;
-import com.eugene.webchatapp.storage.InMemoryMessageStorage;
-import com.eugene.webchatapp.storage.Portion;
-import com.eugene.webchatapp.storage.StaticKeyStorage;
+import com.eugene.webchatapp.service.MessageDAOService;
+import com.eugene.webchatapp.service.UserDAOService;
 import com.eugene.webchatapp.utils.MessageHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -24,13 +23,14 @@ import java.util.*;
 @WebServlet(value = "/chat", asyncSupported = true)
 public class ChatServlet extends HttpServlet{
 
-    private InMemoryMessageStorage messages;
+    private MessageDAOService messages;
+    private UserDAOService users;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        messages = new InMemoryMessageStorage();
-        messages.loadMessages();
+        messages = new MessageDAOService();
+        users = new UserDAOService();
     }
 
     @Override
@@ -43,25 +43,25 @@ public class ChatServlet extends HttpServlet{
             return;
         }
 
-        if(!query.contains("users")){
-
-            Map<String, String> map = queryToMap(query);
-
-            String token = map.get(Constants.REQUEST_PARAM_TOKEN);
-
-            int index = MessageHelper.parseToken(token);
-
-            Portion portion = new Portion(index);
-            String responseBody = MessageHelper.buildServerResponseBody(messages.getPortion(portion), messages.size());
-
-            resp.getOutputStream().write(responseBody.getBytes());
-
-        }else{
-
-            String responseBodyUsers = MessageHelper.buildServerResponseBodyUsers(StaticKeyStorage.getUsersName());
+        if(query.contains("users")){
+            String responseBodyUsers = MessageHelper.buildServerResponseBodyUsers(users.getUsersName());
             resp.getOutputStream().write(responseBodyUsers.getBytes());
-
+            return;
         }
+
+        if(query.contains("search")){
+
+            String textSearch = query.substring(7, query.length());
+
+            String responseBodySearch = MessageHelper.buildServerResponseBodySearch(messages.search(textSearch));
+            resp.getOutputStream().write(responseBodySearch.getBytes());
+
+            return;
+        }
+
+        String responseBody = MessageHelper.buildServerResponseBody(messages.getMessages(), messages.getMessages().size());
+
+        resp.getOutputStream().write(responseBody.getBytes());
 
     }
 
@@ -128,8 +128,8 @@ public class ChatServlet extends HttpServlet{
                 String newName = (String) jsonObject.get("newName");
                 String oldName = (String) jsonObject.get("oldName");
 
-                if(!StaticKeyStorage.isUser(newName)){
-                    StaticKeyStorage.editName(newName, oldName);
+                if(!users.isUser(newName)){
+                    users.editName(newName, oldName);
                 }
 
             } catch (ParseException e) {

@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InMemoryMessageStorage implements MessageStorage {
 
@@ -60,10 +61,10 @@ public class InMemoryMessageStorage implements MessageStorage {
         for(int i = 0; i < messages.size(); i++){
             if(messages.get(i).getId().equals(message.getId())){
 
-                if(messageDAO.update(messages.get(i).getText(), message.getText())){
+                /*if(messageDAO.update(messages.get(i).getText(), message.getText())){
                     messages.get(i).setText(message.getText());
                     return true;
-                }
+                }*/
                 //fileMessageStorage.updateMessage(message);
             }
         }
@@ -98,6 +99,12 @@ public class InMemoryMessageStorage implements MessageStorage {
         }*/
 
         messages.addAll(messageDAO.findAll());
+    }
+
+    public List<Message> search(String text){
+        return messages.stream().filter(item -> item.getText().toLowerCase().
+                contains(text.toLowerCase())).
+                collect(Collectors.toList());
     }
 
     @Override

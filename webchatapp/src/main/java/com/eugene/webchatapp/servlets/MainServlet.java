@@ -1,7 +1,8 @@
 package com.eugene.webchatapp.servlets;
 
 import com.eugene.webchatapp.encryption.HashCode;
-import com.eugene.webchatapp.storage.StaticKeyStorage;
+import com.eugene.webchatapp.service.UserDAOService;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,7 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        UserDAOService userDAOService = new UserDAOService();
         Cookie[] cookies = req.getCookies();
 
         String uidParam = req.getParameter("uid");
@@ -31,7 +33,7 @@ public class MainServlet extends HttpServlet {
             }
         }
 
-        if(StaticKeyStorage.getUserByUid(uidParam) != null){
+        if(userDAOService.getUserByUid(uidParam) != null){
             resp.sendRedirect("/homepage.jsp");
             return;
         }

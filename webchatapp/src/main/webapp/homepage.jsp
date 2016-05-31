@@ -44,8 +44,6 @@
                 <div class="chat-list">
                     <ul class="messages">
 
-
-
                     </ul>
                 </div>
                 <div class="input-area">

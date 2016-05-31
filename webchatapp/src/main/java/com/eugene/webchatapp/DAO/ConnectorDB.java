@@ -14,6 +14,8 @@ public class ConnectorDB {
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
+    private static Connection connection;
+
     public static Connection getConnection() throws SQLException{
 
         try {
@@ -26,7 +28,12 @@ public class ConnectorDB {
             e.printStackTrace();
         }
 
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        return connection;
+    }
+
+    public static void closeConnection() throws SQLException{
+        connection.close();
     }
 
 }

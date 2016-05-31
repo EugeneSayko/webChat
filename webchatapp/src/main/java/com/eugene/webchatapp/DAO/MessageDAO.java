@@ -1,10 +1,14 @@
 package com.eugene.webchatapp.DAO;
 
 import com.eugene.webchatapp.models.Message;
-import com.eugene.webchatapp.storage.StaticKeyStorage;
+import com.eugene.webchatapp.service.UserDAOService;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,10 +16,11 @@ import java.util.List;
  */
 public class MessageDAO {
 
-    private static final String SQL_INSERT = "INSERT INTO messages(id, id_user, text, date) VALUES(?, ?, ?, ?)";
-    private static final String SQL_ALL_SELECT = "SELECT * FROM messages";
+    private static final String SQL_INSERT = "INSERT INTO messages(id, id_user, text, date_time) VALUES(?, ?, ?, ?)";
+    private static final String SQL_ALL_SELECT = "SELECT * FROM messages ORDER BY date_time";
     private static final String SQL_DELETE_ID = "DELETE FROM messages where id = ?";
-    private static final String SQL_UPDATE_TEXT = "UPDATE messages set text = ? where text = ?";
+    private static final String SQL_UPDATE_TEXT = "UPDATE messages set text = ? where id = ?";
+    private static final UserDAOService userDAOService = new UserDAOService();
 
 
     public boolean insertMessage(Message message){
@@ -24,22 +29,25 @@ public class MessageDAO {
 
         try(
                 PreparedStatement ps = ConnectorDB.getConnection().prepareStatement(SQL_INSERT);
+
                 ) {
 
 
             ps.setString(1, message.getId());
-            ps.setString(2, StaticKeyStorage.getByUsername(message.getAuthor()));
+            ps.setString(2, userDAOService.getByUsername(message.getAuthor()));
             ps.setString(3, message.getText());
-            ps.setDate(4, new Date(message.getTimestamp()));
+            ps.setTimestamp(4, new java.sql.Timestamp(message.getTimestamp()));
 
             ps.executeUpdate();
 
             flag = true;
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return flag;
+
     }
 
     public List<Message> findAll(){
@@ -56,13 +64,13 @@ public class MessageDAO {
                 Message message = new Message();
 
                 message.setId(resultSet.getString("id"));
-                message.setAuthor(StaticKeyStorage.getUserByUid(resultSet.getString("id_user")));
+                message.setAuthor(userDAOService.getUserByUid(resultSet.getString("id_user")));
                 message.setText(resultSet.getString("text"));
-                message.setTimestamp(resultSet.getDate("date").getTime());
+                message.setTimestamp(resultSet.getDate("date_time").getTime());
 
                 messages.add(message);
             }
-
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,7 +89,7 @@ public class MessageDAO {
             preparedStatement.setString(1, id);
             preparedStatement.executeUpdate();
             flag = true;
-
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -89,7 +97,7 @@ public class MessageDAO {
         return flag;
     }
 
-    public boolean update(String oldText, String newtext){
+    public boolean update(Message message){
 
         boolean flag = true;
 
@@ -97,12 +105,12 @@ public class MessageDAO {
                 PreparedStatement preparedStatement = ConnectorDB.getConnection().prepareStatement(SQL_UPDATE_TEXT);
                 ) {
 
-            preparedStatement.setString(1, newtext);
-            preparedStatement.setString(2, oldText);
+            preparedStatement.setString(1, message.getText());
+            preparedStatement.setString(2, message.getId());
 
             preparedStatement.executeUpdate();
             flag = true;
-
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }

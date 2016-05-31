@@ -1,7 +1,8 @@
 package com.eugene.webchatapp.Filters;
 
 
-import com.eugene.webchatapp.storage.StaticKeyStorage;
+import com.eugene.webchatapp.service.UserDAOService;
+
 import com.sun.deploy.net.HttpRequest;
 
 import javax.servlet.*;
@@ -14,6 +15,7 @@ import java.io.IOException;
 @WebFilter(value = "/homepage.jsp")
 public class Filter implements javax.servlet.Filter {
 
+    UserDAOService userDAOService = new UserDAOService();
 
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -44,7 +46,7 @@ public class Filter implements javax.servlet.Filter {
     }
 
     private boolean checkAuthenticated(String uid){
-        return StaticKeyStorage.getUserByUid(uid) != null;
+        return userDAOService.getUserByUid(uid) != null;
     }
 
     public void destroy() {

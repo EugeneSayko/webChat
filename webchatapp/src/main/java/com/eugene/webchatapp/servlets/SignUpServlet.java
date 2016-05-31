@@ -1,7 +1,7 @@
 package com.eugene.webchatapp.servlets;
 
 import com.eugene.webchatapp.encryption.HashCode;
-import com.eugene.webchatapp.storage.StaticKeyStorage;
+import com.eugene.webchatapp.service.UserDAOService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -52,7 +52,9 @@ public class SignUpServlet extends HttpServlet {
             return;
         }
 
-        if(StaticKeyStorage.isUser(username)){
+        UserDAOService userDAOService = new UserDAOService();
+
+        if(userDAOService.isUser(username)){
             resp.sendRedirect("/signup.html");
             return;
         }
@@ -62,7 +64,7 @@ public class SignUpServlet extends HttpServlet {
             return;
         }
 
-        if(StaticKeyStorage.addUser(username, password)){
+        if(userDAOService.addUser(username, password)){
             resp.sendRedirect("/homepage.jsp");
         }else{
             resp.sendRedirect("/signup.html");

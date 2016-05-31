@@ -1,8 +1,10 @@
 package com.eugene.webchatapp.servlets;
 
+import com.eugene.webchatapp.DAO.UserDAO;
 import com.eugene.webchatapp.encryption.HashCode;
 import com.eugene.webchatapp.models.Message;
-import com.eugene.webchatapp.storage.StaticKeyStorage;
+import com.eugene.webchatapp.service.UserDAOService;
+
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -33,6 +35,8 @@ public class LoginServlet extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        UserDAOService users = new UserDAOService();
+
         String username = req.getParameter("username");
         String password = null;
         try {
@@ -52,12 +56,12 @@ public class LoginServlet extends HttpServlet{
 
         }
 
-        if(!StaticKeyStorage.isPassword(username, password)){
+        if(!users.isPassword(username, password)){
             resp.sendRedirect("/");
             return;
         }
 
-        String userId = StaticKeyStorage.getByUsername(username);
+        String userId = users.getByUsername(username);
 
         if(userId == null){
             resp.sendRedirect("/");

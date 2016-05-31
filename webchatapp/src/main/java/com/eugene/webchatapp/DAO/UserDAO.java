@@ -14,9 +14,10 @@ public class UserDAO {
     private static final String SQL_INSERT = "INSERT INTO users(id, name, password) VALUES(?, ?, ?)";
     private static final String SQL_ALL_SELECT = "SELECT * FROM users";
     private static final String SQL_NAME_SELECT = "SELECT name FROM users";
-    private static final String SQL_UPDATE_NAME = "UPDATE users set name=? where name=?";
+    private static final String SQL_UPDATE_NAME = "UPDATE users set name=? WHERE name = ?";
     private static final String SQL_NAME_SELECT_BY_ID = "SELECT name FROM users WHERE id = ?";
     private static final String SQL_ID_SELECT_BY_NAME = "SELECT id FROM users WHERE name = ?";
+    private static final String SQL_USER_SELECT_BY_NAME = "SELECT * FROM users WHERE name=?";
 
     public boolean insertUser(User user){
 
@@ -35,6 +36,7 @@ public class UserDAO {
 
             flag = true;
 
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -60,12 +62,40 @@ public class UserDAO {
 
                 users.add(user);
             }
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
         return users;
+    }
+
+    public User findUser(String username){
+        User user = null;
+
+        try(
+                PreparedStatement preparedStatement = ConnectorDB.getConnection().prepareStatement(SQL_USER_SELECT_BY_NAME);
+
+        ) {
+
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                user = new User();
+                user.setId(resultSet.getString("id"));
+                user.setName(resultSet.getString("name"));
+                user.setPassword(resultSet.getString("password"));
+            }
+
+            ConnectorDB.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
     public List<String> findName(){
@@ -82,6 +112,8 @@ public class UserDAO {
 
                 names.add(name);
             }
+
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -103,6 +135,7 @@ public class UserDAO {
             ps.executeUpdate();
 
             flag = true;
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -126,7 +159,7 @@ public class UserDAO {
             if(resultSet.next()){
                 name = resultSet.getString("name");
             }
-
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -150,7 +183,7 @@ public class UserDAO {
             if(resultSet.next()){
                 id = resultSet.getString("id");
             }
-
+            ConnectorDB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -23,6 +23,7 @@ public class MessageHelper {
     public static final String MESSAGE_PART_TOKEN = "token";
     public static final String TOKEN_TEMPLATE = "TN%dEN";
     public static final String TOKEN_FORMAT = "TN[0-9]{2,}EN";
+    public static final String MESSAGE_PART_SEARCH = "searchMessages";
 
     private static final JSONParser jsonParser = new JSONParser();
 
@@ -89,6 +90,13 @@ public class MessageHelper {
         JSONArray array = getJsonArrayOfUsers(users);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(USERS_PART_ALL_USR, array);
+        return jsonObject.toJSONString();
+    }
+
+    public static String buildServerResponseBodySearch(List<Message> messages){
+        JSONArray array = getJsonArrayOfMessages(messages);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(MESSAGE_PART_SEARCH, array);
         return jsonObject.toJSONString();
     }
 
